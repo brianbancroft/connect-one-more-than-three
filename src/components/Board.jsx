@@ -5,7 +5,29 @@ import PropTypes from "prop-types";
 function Board(props) {
   const { boardStatus } = props;
 
-  return <div>Board</div>;
+  const BlueToken = () => <div className="rounded-full bg-blue-600 w-12 h-12" />;
+  const RedToken = () => <div className="rounded-full bg-red-600 w-12 h-12" />;
+  
+
+
+  const boardSpaces = boardStatus.flat().map((token, index) => {
+    if (token === 'blue') return (
+        <div className="bg-white p-2 h-full" key={index}><BlueToken /></div>
+    )
+
+    if (token === 'red') return (
+        <div className="bg-white p-2 h-full" key={index}><RedToken /></div>
+    )
+
+    return <div className="bg-white p-2 h-full"  key={index}/>
+
+  })
+
+  return (
+    <section className="bg-slate-200 p-4 grid grid-cols-7 grid-rows-6 gap-4 items-center justify-center">
+        {boardSpaces}    
+    </section>
+  );
 }
 
 Board.propTypes = {

@@ -5,7 +5,7 @@ import Board from "./Board";
 function ActiveGame(props) {
   const { onGameEnd } = props;
 
-  const blankRow = () => [null, "red", null, null, "blue", null, null];
+  const blankRow = () => [null, null, null, null, null, null, null];
 
   const [boardStatus, setBoardStatus] = useState([
     blankRow(),
