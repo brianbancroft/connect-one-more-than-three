@@ -84,20 +84,32 @@ function ActiveGame(props) {
 
     if (rowIndex === null) return;
 
-    // i = row, j = column
-    for (let i = rowIndex - 1; i <= rowIndex + 1; i++) {
-      for (let j = columnIndex - 1; j <= columnIndex + 1; j++) {
-        const validRow = i >= 0 && i <= 5;
-        const validColumn = i >= 0 && i <= 6;
-        const notCurrentSpace = !(i === rowIndex && j === columnIndex);
+    const positionInBoard = ({ x, y }) => x >= 0 && x <= 6 && y >= 0 && y <= 5;
 
-        if (validColumn && validRow && notCurrentSpace) {
+    // i = row, j = column
+    for (let y = rowIndex - 1; y <= rowIndex + 1; y++) {
+      for (let x = columnIndex - 1; x <= columnIndex + 1; x++) {
+        const notCurrentSpace = !(y === rowIndex && x === columnIndex);
+
+        if (positionInBoard({ x, y }) && notCurrentSpace) {
           let count = 1;
           // If the token is the correct color, move a direction to the edge of the board until the count reaches 4
-          if (boardStatus[i][j] === color) {
+          if (boardStatus[y][x] === color) {
             count++;
-            const xVector = columnIndex - j;
-            const yVector = rowIndex - i;
+
+            const xVector = x - columnIndex;
+            const yVector = y - rowIndex;
+
+            const newXPosition = x + xVector;
+            const newYPosition = y + yVector;
+
+            if (
+              positionInBoard({ x: newXPosition, y: newYPosition }) &&
+              boardStatus[newYPosition][newXPosition] === color
+            ) {
+              count++;
+              console.log("Adjacency of two detected");
+            }
           }
         }
       }
