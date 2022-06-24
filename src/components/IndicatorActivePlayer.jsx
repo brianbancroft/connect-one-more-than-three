@@ -5,7 +5,7 @@ function IndicatorActivePlayer(props) {
   const { playerName, color, active } = props;
 
   return (
-    <div>
+    <div className="h-12">
       <h3
         className={`text-xl user-select-none ${
           active ? `underline text-${color}-600` : ""
