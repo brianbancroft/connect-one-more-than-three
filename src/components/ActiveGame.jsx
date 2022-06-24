@@ -22,7 +22,26 @@ function ActiveGame(props) {
   ]);
 
   const handleColumnClick = (column) => () => {
-    console.log("Column clicked ", column);
+    addPieceToColumn({ piece: currentUser, column });
+  };
+
+  const determineColumnAvailable = (columnIndex) => {
+    alert("TODO");
+  };
+
+  const addPieceToColumn = ({ piece, column }) => {
+    const reversedRows = [...boardStatus.reverse()];
+
+    for (let i = 0; i < reversedRows.length; i++) {
+      const row = reversedRows[i];
+
+      if (!(row[column] === "red" || row[column] === "blue")) {
+        reversedRows[i][column] = piece;
+        setBoardStatus(reversedRows.reverse());
+
+        break;
+      }
+    }
   };
 
   return (
