@@ -11,7 +11,9 @@ function ActiveGame(props) {
 
   const availableUsers = ["blue", "red"];
 
-  const [currentUser, setCurrentUser] = useState(availableUsers[0]);
+  const [playerOneActive, setPlayerOneActive] = useState(true);
+  const currentUser = playerOneActive ? availableUsers[0] : availableUsers[1];
+
   const [boardStatus, setBoardStatus] = useState([
     blankRow(),
     blankRow(),
@@ -23,6 +25,7 @@ function ActiveGame(props) {
 
   const handleColumnClick = (column) => () => {
     addPieceToColumn({ piece: currentUser, column });
+    setPlayerOneActive(!playerOneActive);
   };
 
   const determineColumnAvailable = (columnIndex) => {
@@ -30,7 +33,8 @@ function ActiveGame(props) {
   };
 
   const addPieceToColumn = ({ piece, column }) => {
-    const reversedRows = [...boardStatus.reverse()];
+    const newBoard = [...boardStatus];
+    const reversedRows = newBoard.reverse();
 
     for (let i = 0; i < reversedRows.length; i++) {
       const row = reversedRows[i];
