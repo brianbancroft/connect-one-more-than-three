@@ -4,15 +4,8 @@ import Board from "./Board";
 import IndicatorActivePlayer from "./IndicatorActivePlayer";
 import ButtonTriggerMove from "./ButtonTriggerMove";
 
-const activeStalemate = (board) => {
-  const activePiecesSet = new Set(board.flat());
+import useDetectVictory from "../hooks/useDetectVictory";
 
-  return (
-    activePiecesSet.size === 2 &&
-    activePiecesSet.has("blue") &&
-    activePiecesSet.has("red")
-  );
-};
 function ActiveGame(props) {
   const { onGameEnd } = props;
 
@@ -31,19 +24,20 @@ function ActiveGame(props) {
     blankRow(),
     blankRow(),
   ]);
-  const [stalemate, setStalemate] = useState(false);
-  const [victory, setVictory] = useState("");
 
   const [lastPiecePlayed, setLastPiecePlayed] = useState({
     row: null,
     column: null,
   });
 
+  const { victory, stalemate } = useDetectVictory({
+    boardStatus,
+    lastPiecePlayed,
+  });
+
   const handleColumnClick = (column) => () => {
     addPieceToColumn({ piece: currentUser, columnIndex: column });
     setPlayerOneActive(!playerOneActive);
-
-    if (activeStalemate(boardStatus)) setStalemate(true);
   };
 
   const determineColumnUnavailable = (columnIndex) => {
@@ -74,49 +68,6 @@ function ActiveGame(props) {
       }
     }
   };
-
-  const _hasPlayerWon = useEffect(() => {
-    const {
-      currentUser: color,
-      column: columnIndex,
-      row: rowIndex,
-    } = lastPiecePlayed;
-
-    if (rowIndex === null) return;
-
-    const positionInBoard = ({ x, y }) => x >= 0 && x <= 6 && y >= 0 && y <= 5;
-
-    // i = row, j = column
-    for (let y = rowIndex - 1; y <= rowIndex + 1; y++) {
-      for (let x = columnIndex - 1; x <= columnIndex + 1; x++) {
-        const notCurrentSpace = !(y === rowIndex && x === columnIndex);
-
-        if (positionInBoard({ x, y }) && notCurrentSpace) {
-          let count = 1;
-          // If the token is the correct color, move a direction to the edge of the board until the count reaches 4
-          if (boardStatus[y][x] === color) {
-            count++;
-
-            const xVector = x - columnIndex;
-            const yVector = y - rowIndex;
-
-            const newXPosition = x + xVector;
-            const newYPosition = y + yVector;
-
-            if (
-              positionInBoard({ x: newXPosition, y: newYPosition }) &&
-              boardStatus[newYPosition][newXPosition] === color
-            ) {
-              count++;
-              console.log("Adjacency of two detected");
-            }
-          }
-        }
-      }
-    }
-
-    console.log("Last piece ", color, rowIndex, columnIndex);
-  }, [lastPiecePlayed]);
 
   return (
     <div>
