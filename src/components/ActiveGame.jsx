@@ -35,8 +35,8 @@ function ActiveGame(props) {
   const [victory, setVictory] = useState("");
 
   const [lastPiecePlayed, setLastPiecePlayed] = useState({
-    row: "",
-    column: "",
+    row: null,
+    column: null,
   });
 
   const handleColumnClick = (column) => () => {
@@ -82,13 +82,22 @@ function ActiveGame(props) {
       row: rowIndex,
     } = lastPiecePlayed;
 
-    if (isNaN(rowIndex)) return;
+    if (rowIndex === null) return;
 
     // i = row, j = column
     for (let i = rowIndex - 1; i <= rowIndex + 1; i++) {
       for (let j = columnIndex - 1; j <= columnIndex + 1; j++) {
-        if (!(i === rowIndex && j === columnIndex)) {
-          console.log("Row ", i, "col ", j);
+        const validRow = i >= 0 && i <= 5;
+        const validColumn = i >= 0 && i <= 6;
+        const notCurrentSpace = !(i === rowIndex && j === columnIndex);
+
+        if (validColumn && validRow && notCurrentSpace) {
+          let count = 1;
+          // If the token is the correct color, move a direction to the edge of the board until the count reaches 4
+          if (boardStatus[i][j] === color) {
+            count++;
+            console.log("adjacency of 1 detected at coordinate ", i, j);
+          }
         }
       }
     }
