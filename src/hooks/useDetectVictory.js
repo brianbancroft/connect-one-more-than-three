@@ -16,7 +16,7 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
     }
   }, [boardStatus]);
 
-  const _hasPlayerWon = useEffect(() => {
+  const _detectVictory = useEffect(() => {
     const {
       currentUser: color,
       column: columnIndex,
@@ -27,18 +27,23 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
 
     const positionInBoard = ({ x, y }) => x >= 0 && x <= 6 && y >= 0 && y <= 5;
 
+    const markerPresentAtPosition = ({ x, y, color }) =>
+      positionInBoard({ x, y }) && boardStatus[y][x] === color;
+
     // i = row, j = column
     for (let y = rowIndex - 1; y <= rowIndex + 1; y++) {
       for (let x = columnIndex - 1; x <= columnIndex + 1; x++) {
         const notCurrentSpace = !(y === rowIndex && x === columnIndex);
 
-        if (positionInBoard({ x, y }) && notCurrentSpace) {
-          let count = 1;
+        if (notCurrentSpace) {
           // If the token is the correct color, move a direction to the edge of the board until the count reaches 4
-          if (boardStatus[y][x] === color) {
-            console.log("Adjancy of one detected");
-            count++;
-
+          if (
+            markerPresentAtPosition({
+              x,
+              y,
+              color,
+            })
+          ) {
             const xVector = x - columnIndex;
             const yVector = y - rowIndex;
 
@@ -46,30 +51,67 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
             let newYPosition = y + yVector;
 
             if (
-              positionInBoard({ x: newXPosition, y: newYPosition }) &&
-              boardStatus[newYPosition][newXPosition] === color
+              markerPresentAtPosition({
+                x: newXPosition,
+                y: newYPosition,
+                color,
+              })
             ) {
-              count++;
-              console.log("Adjacency of two detected");
+              newXPosition = x + 2 * xVector;
+              newYPosition = y + 2 * yVector;
+
+              if (
+                markerPresentAtPosition({
+                  x: newXPosition,
+                  y: newYPosition,
+                  color,
+                })
+              ) {
+                setVictory(color);
+              } else {
+                newXPosition = x - 2 * xVector;
+                newYPosition = y - 2 * yVector;
+
+                if (
+                  markerPresentAtPosition({
+                    x: newXPosition,
+                    y: newYPosition,
+                    color,
+                  })
+                ) {
+                  setVictory(color);
+                }
+              }
             } else {
-              console.log("No adajency of two; detecting other direction");
               newXPosition = x - 2 * xVector;
               newYPosition = y - 2 * yVector;
 
               if (
-                positionInBoard({ x: newXPosition, y: newYPosition }) &&
-                boardStatus[newYPosition][newXPosition] === color
+                markerPresentAtPosition({
+                  x: newXPosition,
+                  y: newYPosition,
+                  color,
+                })
               ) {
-                console.log("Reversed course adjancy of two detected");
+                newXPosition = x - 3 * xVector;
+                newYPosition = y - 3 * yVector;
+
+                if (
+                  markerPresentAtPosition({
+                    x: newXPosition,
+                    y: newYPosition,
+                    color,
+                  })
+                ) {
+                  setVictory(color);
+                }
               }
             }
           }
         }
       }
     }
-
-    console.log("Last piece ", color, rowIndex, columnIndex);
-  }, [lastPiecePlayed]);
+  }, [lastPiecePlayed, boardStatus]);
 
   return { victory, stalemate };
 }
