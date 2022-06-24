@@ -30,9 +30,6 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
     const markerPresentAtPosition = ({ x, y, color }) =>
       positionInBoard({ x, y }) && boardStatus[y][x] === color;
 
-    const markerPresentAtVector = ({ x, dx = 0, y, dy = 0, t = 0, color }) =>
-      markerPresentAtPosition({ x: x + t * dx, y: y + t * dy, color });
-
     /**
      * Partially-applied function that checks position
      *
