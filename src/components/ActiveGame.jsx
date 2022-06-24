@@ -96,7 +96,8 @@ function ActiveGame(props) {
           // If the token is the correct color, move a direction to the edge of the board until the count reaches 4
           if (boardStatus[i][j] === color) {
             count++;
-            console.log("adjacency of 1 detected at coordinate ", i, j);
+            const xVector = columnIndex - j;
+            const yVector = rowIndex - i;
           }
         }
       }
