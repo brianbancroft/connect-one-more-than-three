@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Board from "./Board";
 import IndicatorActivePlayer from "./IndicatorActivePlayer";
 import ButtonTriggerMove from "./ButtonTriggerMove";
 
+const activeStalemate = (board) => {
+  const activePiecesSet = new Set(board.flat());
+
+  return (
+    activePiecesSet.size === 2 &&
+    activePiecesSet.has("blue") &&
+    activePiecesSet.has("red")
+  );
+};
 function ActiveGame(props) {
   const { onGameEnd } = props;
 
@@ -22,10 +31,19 @@ function ActiveGame(props) {
     blankRow(),
     blankRow(),
   ]);
+  const [stalemate, setStalemate] = useState(false);
+  const [victory, setVictory] = useState("");
+
+  const [lastPiecePlayed, setLastPiecePlayed] = useState({
+    row: "",
+    column: "",
+  });
 
   const handleColumnClick = (column) => () => {
     addPieceToColumn({ piece: currentUser, columnIndex: column });
     setPlayerOneActive(!playerOneActive);
+
+    if (activeStalemate(boardStatus)) setStalemate(true);
   };
 
   const determineColumnUnavailable = (columnIndex) => {
@@ -45,12 +63,38 @@ function ActiveGame(props) {
 
       if (!(row[columnIndex] === "red" || row[columnIndex] === "blue")) {
         reversedRows[i][columnIndex] = piece;
+        setLastPiecePlayed({
+          row: 6 - 1 - i,
+          column: columnIndex,
+          currentUser,
+        });
         setBoardStatus(reversedRows.reverse());
 
         break;
       }
     }
   };
+
+  const _hasPlayerWon = useEffect(() => {
+    const {
+      currentUser: color,
+      column: columnIndex,
+      row: rowIndex,
+    } = lastPiecePlayed;
+
+    if (isNaN(rowIndex)) return;
+
+    // i = row, j = column
+    for (let i = rowIndex - 1; i <= rowIndex + 1; i++) {
+      for (let j = columnIndex - 1; j <= columnIndex + 1; j++) {
+        if (!(i === rowIndex && j === columnIndex)) {
+          console.log("Row ", i, "col ", j);
+        }
+      }
+    }
+
+    console.log("Last piece ", color, rowIndex, columnIndex);
+  }, [lastPiecePlayed]);
 
   return (
     <div>
@@ -109,6 +153,8 @@ function ActiveGame(props) {
             active={availableUsers[1] === currentUser}
           />
         </div>
+        {stalemate ? <div>stalemate</div> : <></>}
+        {victory ? <div>victory by {victory}</div> : <></>}
         <div className="capitalize flex w-full justify-center pt-12">
           <button
             onClick={onGameEnd}
