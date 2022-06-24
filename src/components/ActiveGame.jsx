@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Board from "./Board";
 import IndicatorActivePlayer from "./IndicatorActivePlayer";
+import ButtonTriggerMove from "./ButtonTriggerMove";
 
 function ActiveGame(props) {
   const { onGameEnd } = props;
@@ -20,8 +21,43 @@ function ActiveGame(props) {
     blankRow(),
   ]);
 
+  const handleColumnClick = (column) => () => {
+    console.log("Column clicked ", column);
+  };
+
   return (
     <div>
+      <div className="grid grid-cols-7 px-2 gap-x-4 mb-2">
+        <ButtonTriggerMove
+          onClick={handleColumnClick(0)}
+          currentColor={currentUser}
+        />
+        <ButtonTriggerMove
+          onClick={handleColumnClick(1)}
+          currentColor={currentUser}
+        />
+        <ButtonTriggerMove
+          onClick={handleColumnClick(2)}
+          currentColor={currentUser}
+        />
+        <ButtonTriggerMove
+          onClick={handleColumnClick(3)}
+          currentColor={currentUser}
+        />
+        <ButtonTriggerMove
+          onClick={handleColumnClick(4)}
+          currentColor={currentUser}
+        />
+        <ButtonTriggerMove
+          onClick={handleColumnClick(5)}
+          currentColor={currentUser}
+        />
+        <ButtonTriggerMove
+          onClick={handleColumnClick(6)}
+          currentColor={currentUser}
+        />
+      </div>
+
       <Board boardStatus={boardStatus} />
       <br />
 
