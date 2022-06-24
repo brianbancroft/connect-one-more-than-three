@@ -74,37 +74,37 @@ function ActiveGame(props) {
       <div className="grid grid-cols-7 px-2 gap-x-4 mb-2">
         <ButtonTriggerMove
           onClick={handleColumnClick(0)}
-          disabled={determineColumnUnavailable(0)}
+          disabled={victory || stalemate || determineColumnUnavailable(0)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(1)}
-          disabled={determineColumnUnavailable(1)}
+          disabled={victory || stalemate || determineColumnUnavailable(1)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(2)}
-          disabled={determineColumnUnavailable(2)}
+          disabled={victory || stalemate || determineColumnUnavailable(2)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(3)}
-          disabled={determineColumnUnavailable(3)}
+          disabled={victory || stalemate || determineColumnUnavailable(3)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(4)}
-          disabled={determineColumnUnavailable(4)}
+          disabled={victory || stalemate || determineColumnUnavailable(4)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(5)}
-          disabled={determineColumnUnavailable(5)}
+          disabled={victory || stalemate || determineColumnUnavailable(5)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(6)}
-          disabled={determineColumnUnavailable(6)}
+          disabled={victory || stalemate || determineColumnUnavailable(6)}
           currentColor={currentUser}
         />
       </div>
@@ -126,7 +126,7 @@ function ActiveGame(props) {
             active={availableUsers[1] === currentUser}
           />
         </div>
-        {stalemate ? <div>stalemate</div> : <></>}
+        {stalemate && !victory ? <div>stalemate</div> : <></>}
         {victory ? <div>victory by {victory}</div> : <></>}
         <div className="capitalize flex w-full justify-center pt-12">
           <button
