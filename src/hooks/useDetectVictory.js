@@ -30,6 +30,26 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
     const markerPresentAtPosition = ({ x, y, color }) =>
       positionInBoard({ x, y }) && boardStatus[y][x] === color;
 
+    const markerPresentAtVector = ({ x, dx = 0, y, dy = 0, t = 0, color }) =>
+      markerPresentAtPosition({ x: x + t * dx, y: y + t * dy, color });
+
+    /**
+     * Partially-applied function that checks position
+     *
+     * @date 2022-06-24
+     * @param {Integer} x the current column position of the sweeping loop
+     * @param {Integer} y the current row position of the sweeping loop
+     * @param {Integer} dx the difference between the current column position of the sweeping index and the initial position given dt = 1
+     * @param {Integer} dy the difference between the current row position of the sweeping index and the initial position given dt = 1
+     * @param {Integer} t treats position of the marker as a parametric function where (x,y) = f(t)
+     * @param {String} color the current player. trying to keep it to 'red' or 'blue'...
+     * @returns {Boolean} Is colored marker present
+     */
+    const checkMarkerPresent =
+      ({ x, y, color, dx, dy }) =>
+      (t) =>
+        markerPresentAtPosition({ x: x + t * dx, y: y + t * dy, color });
+
     // i = row, j = column
     for (let y = rowIndex - 1; y <= rowIndex + 1; y++) {
       for (let x = columnIndex - 1; x <= columnIndex + 1; x++) {
@@ -44,68 +64,21 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
               color,
             })
           ) {
-            const xVector = x - columnIndex;
-            const yVector = y - rowIndex;
-
-            let newXPosition = x + xVector;
-            let newYPosition = y + yVector;
+            const markerPresentAtTime = checkMarkerPresent({
+              x,
+              dx: x - columnIndex,
+              y,
+              dy: y - rowIndex,
+              color,
+            });
 
             if (
-              markerPresentAtPosition({
-                x: newXPosition,
-                y: newYPosition,
-                color,
-              })
+              (markerPresentAtTime(1) && markerPresentAtTime(2)) ||
+              (markerPresentAtTime(1) &&
+                markerPresentAtTime(-1) &&
+                markerPresentAtTime(-2))
             ) {
-              newXPosition = x + 2 * xVector;
-              newYPosition = y + 2 * yVector;
-
-              if (
-                markerPresentAtPosition({
-                  x: newXPosition,
-                  y: newYPosition,
-                  color,
-                })
-              ) {
-                setVictory(color);
-              } else {
-                newXPosition = x - 2 * xVector;
-                newYPosition = y - 2 * yVector;
-
-                if (
-                  markerPresentAtPosition({
-                    x: newXPosition,
-                    y: newYPosition,
-                    color,
-                  })
-                ) {
-                  setVictory(color);
-                }
-              }
-            } else {
-              newXPosition = x - 2 * xVector;
-              newYPosition = y - 2 * yVector;
-
-              if (
-                markerPresentAtPosition({
-                  x: newXPosition,
-                  y: newYPosition,
-                  color,
-                })
-              ) {
-                newXPosition = x - 3 * xVector;
-                newYPosition = y - 3 * yVector;
-
-                if (
-                  markerPresentAtPosition({
-                    x: newXPosition,
-                    y: newYPosition,
-                    color,
-                  })
-                ) {
-                  setVictory(color);
-                }
-              }
+              setVictory(color);
             }
           }
         }
