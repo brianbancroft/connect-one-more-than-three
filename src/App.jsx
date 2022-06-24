@@ -10,7 +10,14 @@ function App() {
     return (
       <section>
         <h2 className="text-2xl">Press button to start game</h2>
-        <button onClick={startGame}>click me</button>
+        <div className="h-72 w-full flex items-center justify-center">
+          <button
+            onClick={startGame}
+            className="bg-blue-700 text-white text-2xl px-4 py-2 uppercase rounded"
+          >
+            click me
+          </button>
+        </div>
       </section>
     );
   };
