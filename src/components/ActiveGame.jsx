@@ -24,23 +24,27 @@ function ActiveGame(props) {
   ]);
 
   const handleColumnClick = (column) => () => {
-    addPieceToColumn({ piece: currentUser, column });
+    addPieceToColumn({ piece: currentUser, columnIndex: column });
     setPlayerOneActive(!playerOneActive);
   };
 
-  const determineColumnAvailable = (columnIndex) => {
-    alert("TODO");
+  const determineColumnUnavailable = (columnIndex) => {
+    for (let i = 0; i < boardStatus.length; i++) {
+      const row = boardStatus[i];
+      if (row[columnIndex] === null) return false;
+    }
+    return true;
   };
 
-  const addPieceToColumn = ({ piece, column }) => {
+  const addPieceToColumn = ({ piece, columnIndex }) => {
     const newBoard = [...boardStatus];
     const reversedRows = newBoard.reverse();
 
     for (let i = 0; i < reversedRows.length; i++) {
       const row = reversedRows[i];
 
-      if (!(row[column] === "red" || row[column] === "blue")) {
-        reversedRows[i][column] = piece;
+      if (!(row[columnIndex] === "red" || row[columnIndex] === "blue")) {
+        reversedRows[i][columnIndex] = piece;
         setBoardStatus(reversedRows.reverse());
 
         break;
@@ -53,30 +57,37 @@ function ActiveGame(props) {
       <div className="grid grid-cols-7 px-2 gap-x-4 mb-2">
         <ButtonTriggerMove
           onClick={handleColumnClick(0)}
+          disabled={determineColumnUnavailable(0)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(1)}
+          disabled={determineColumnUnavailable(1)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(2)}
+          disabled={determineColumnUnavailable(2)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(3)}
+          disabled={determineColumnUnavailable(3)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(4)}
+          disabled={determineColumnUnavailable(4)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(5)}
+          disabled={determineColumnUnavailable(5)}
           currentColor={currentUser}
         />
         <ButtonTriggerMove
           onClick={handleColumnClick(6)}
+          disabled={determineColumnUnavailable(6)}
           currentColor={currentUser}
         />
       </div>

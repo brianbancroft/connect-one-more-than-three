@@ -2,7 +2,17 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function ButtonTriggerMove(props) {
-  const { onClick, currentColor } = props;
+  const { onClick, currentColor, disabled } = props;
+
+  if (disabled)
+    return (
+      <button
+        className={`rounded p-4 border bg-gray-400 cursor-not-allowed`}
+        disabled
+      >
+        ␣
+      </button>
+    );
 
   return (
     <>
@@ -23,6 +33,7 @@ function ButtonTriggerMove(props) {
 ButtonTriggerMove.propTypes = {
   onClick: PropTypes.func.isRequired,
   currentColor: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default ButtonTriggerMove;
