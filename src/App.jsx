@@ -15,8 +15,17 @@ function App() {
         <div className="bg-white w-3/4 h-2/3 rounded border border-black shadow-xl p-8">
           <h2 className="text-2xl my-3">A Sample in React</h2>
           <p className="my-2">
-            Connect three plus one is based on the game of a similar name. A
-            sample demo.
+            Connect three plus one is based on the game of a similar name.{" "}
+          </p>
+          <p className="my-2">
+            <a
+              href="https://github.com/brianbancroft/connect-one-more-than-three"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500 hover:underline ease-in-out"
+            >
+              View on Github
+            </a>
           </p>
           <div className="h-72 w-full flex items-center justify-center">
             <button
@@ -26,15 +35,7 @@ function App() {
               start game
             </button>
           </div>
-        </div>
-        <div>
-          <a
-            href="https://github.com/brianbancroft/connect-one-more-than-three"
-            target="_blank"
-            rel="noreferrer"
-          >
-            View me on Github
-          </a>
+          <div></div>
         </div>
       </section>
     );
