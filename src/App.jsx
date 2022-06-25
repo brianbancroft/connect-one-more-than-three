@@ -15,7 +15,7 @@ function App() {
         <div className="bg-white w-3/4 h-2/3 rounded border border-black shadow-xl p-8">
           <h2 className="text-2xl my-3">A Sample in React</h2>
           <p className="my-2">
-            Connect three plus one is based on the game of a similar name.{" "}
+            connect three plus one is based on the game of a similar name.{" "}
           </p>
           <p className="my-2">
             <a
