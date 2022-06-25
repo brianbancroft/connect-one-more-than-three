@@ -43,8 +43,8 @@ function App() {
 
   return (
     <>
-      <header className="py-4 px-8 bg-slate-400 border-b-8 ">
-        Connect three plus one
+      <header className="py-4 px-8 bg-slate-400 border-b-8 uppercase font-semibold">
+        connect three plus one
       </header>
       <main className="w-screen h-screen flex justify-center">
         {gameActive ? <ActiveGame onGameEnd={endGame} /> : <SplashScreen />}

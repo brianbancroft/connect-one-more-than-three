@@ -126,7 +126,7 @@ function ActiveGame() {
             playerColors={playerColors}
           />
         </div>
-        <div className="capitalize flex w-full items-center pt-12 flex-col">
+        <div className="capitalize flex w-full items-center pt-8 flex-col">
           {stalemate && !victory ? (
             <h2 className="text-2xl font-bold underline capitalize">
               stalemate

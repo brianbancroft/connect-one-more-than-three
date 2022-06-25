@@ -5,32 +5,48 @@ function Board(props) {
   const { boardStatus } = props;
 
   const BlueToken = () => (
-    <div className="rounded-full bg-blue-600 w-10 h-10" />
+    <div className="rounded-full bg-blue-600 w-12 h-12" />
   );
-  const RedToken = () => <div className="rounded-full bg-red-600 w-10 h-10" />;
+  const RedToken = () => <div className="rounded-full bg-red-600 w-12 h-12" />;
 
   const boardSpaces = boardStatus.flat().map((token, index) => {
     if (token === "blue")
       return (
-        <div className="bg-white p-2 h-full flex justify-center" key={index}>
+        <div
+          className="bg-yellow-200 p-2 h-full flex justify-center"
+          key={index}
+        >
           <BlueToken />
         </div>
       );
 
     if (token === "red")
       return (
-        <div className="bg-white p-2 h-full flex justify-center" key={index}>
+        <div
+          className="bg-yellow-200 p-2 h-full flex justify-center"
+          key={index}
+        >
           <RedToken />
         </div>
       );
 
-    return <div className="bg-white p-2 h-14 w-14" key={index} />;
+    return (
+      <div className=" p-2 h-14 w-14 bg-yellow-200" key={index}>
+        <div className="bg-white w-12 h-12 rounded-full" />
+      </div>
+    );
   });
 
   return (
-    <section className="bg-slate-200 p-4 grid grid-cols-7 grid-rows-6 gap-4 items-center justify-center border border-black">
-      {boardSpaces}
-    </section>
+    <>
+      <section className="bg-yellow-200 p-4 grid grid-cols-7 grid-rows-6 gap-4 items-center justify-center border border-black">
+        {boardSpaces}
+      </section>
+      <div className="flex justify-between">
+        <div className="bg-yellow-200 w-10 h-6 border-b border-x border-black ml-8"></div>
+        <div className="bg-yellow-200 w-10 h-6 border-b border-x border-black mr-8"></div>
+      </div>
+    </>
   );
 }
 
