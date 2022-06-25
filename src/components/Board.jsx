@@ -6,44 +6,11 @@ import Token from "./Token";
 function Board(props) {
   const { boardStatus } = props;
 
-  const BlueToken = () => (
-    <div className="rounded-full bg-blue-600 w-12 h-12 border border-black">
-      <div className="hidden">token-blue</div>
-    </div>
-  );
-  const RedToken = () => (
-    <div className="rounded-full bg-red-600 w-12 h-12 border border-black">
-      <div className="hidden">token-red</div>
-    </div>
-  );
-
-  const boardSpaces = boardStatus.flat().map((token, index) => {
-    if (token === "blue")
-      return (
-        <div
-          className="bg-yellow-200 p-2 h-full flex justify-center"
-          key={index}
-        >
-          <BlueToken />
-        </div>
-      );
-
-    if (token === "red")
-      return (
-        <div
-          className="bg-yellow-200 p-2 h-full flex justify-center"
-          key={index}
-        >
-          <RedToken />
-        </div>
-      );
-
-    return (
-      <div className=" p-2 h-14 w-14 bg-yellow-200" key={index}>
-        <div className="bg-white w-12 h-12 rounded-full border border-black" />
-      </div>
-    );
-  });
+  const boardSpaces = boardStatus
+    .flat()
+    .map((token, index) => (
+      <Token key={index} blue={token === "blue"} red={token === "red"} />
+    ));
 
   return (
     <>

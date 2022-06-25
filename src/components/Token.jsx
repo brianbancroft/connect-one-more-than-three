@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function Token(props) {
+  const { blue, red } = props;
+
   if (blue)
     return (
       <div className="rounded-full bg-blue-600 w-12 h-12 border border-black">
@@ -17,7 +19,7 @@ function Token(props) {
     );
 
   return (
-    <div className=" p-2 h-14 w-14 bg-yellow-200" key={index}>
+    <div className="h-14 w-14 bg-yellow-200">
       <div className="bg-white w-12 h-12 rounded-full border border-black" />
     </div>
   );
