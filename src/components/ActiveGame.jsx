@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Board from "./Board";
@@ -7,8 +7,10 @@ import IndicatorActivePlayer from "./IndicatorActivePlayer";
 import useDetectVictory from "../hooks/useDetectVictory";
 
 const blankRow = () => [null, null, null, null, null, null, null];
+const generateBoard = () => Array.from(Array(6)).map(blankRow);
+
 const initialState = {
-  boardStatus: Array.from(Array(6)).map(blankRow),
+  boardStatus: generateBoard(),
   playerOneActive: true,
   lastPiecePlayed: {
     row: null,
@@ -26,20 +28,29 @@ function reducer(state, action) {
         lastPiecePlayed: action.lastPiecePlayed,
       };
 
+    case "reset":
+      return {
+        boardStatus: generateBoard(),
+        playerOneActive: true,
+        lastPiecePlayed: {
+          row: null,
+          column: null,
+          currentUser: null,
+        },
+      };
+
     default:
-      console.log("Unknwon case ", action.type);
+      console.error("Unknwon case ", action.type);
   }
 }
 
 function ActiveGame(props) {
   const { onGameEnd } = props;
 
-  const availableUsers = ["blue", "red"];
+  const playerColors = ["blue", "red"];
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const currentUser = state.playerOneActive
-    ? availableUsers[0]
-    : availableUsers[1];
+  const currentUser = state.playerOneActive ? playerColors[0] : playerColors[1];
 
   const { boardStatus, lastPiecePlayed } = state;
 
@@ -83,6 +94,11 @@ function ActiveGame(props) {
     return true;
   };
 
+  function handleEndGame() {
+    dispatch({ type: "reset" });
+    onGameEnd();
+  }
+
   return (
     <div>
       <div className="grid grid-cols-7 px-2 gap-x-4 mb-2">
@@ -90,7 +106,9 @@ function ActiveGame(props) {
           <ButtonTriggerMove
             key={`trigger-move-${index}`}
             onClick={handleColumnClick(index)}
-            disabled={victory || stalemate || determineColumnUnavailable(index)}
+            disabled={Boolean(
+              victory || stalemate || determineColumnUnavailable(index)
+            )}
             currentColor={currentUser}
           />
         ))}
@@ -103,25 +121,44 @@ function ActiveGame(props) {
         <div className="flex justify-between w-full">
           <IndicatorActivePlayer
             playerName="Player 1"
-            color={availableUsers[0]}
-            active={availableUsers[0] === currentUser}
+            color={playerColors[0]}
+            active={playerColors[0] === currentUser}
+            playerColors={playerColors}
           />
 
           <IndicatorActivePlayer
             playerName="Player 2"
-            color={availableUsers[1]}
-            active={availableUsers[1] === currentUser}
+            color={playerColors[1]}
+            active={playerColors[1] === currentUser}
+            playerColors={playerColors}
           />
         </div>
-        {stalemate && !victory ? <div>stalemate</div> : <></>}
-        {victory ? <div>victory by {victory}</div> : <></>}
-        <div className="capitalize flex w-full justify-center pt-12">
+        <div className="capitalize flex w-full items-center pt-12 flex-col">
           <button
-            onClick={onGameEnd}
-            className="bg-slate-200 text-slate-600 italic p-4 border border-slate-300 rounded"
+            onClick={handleEndGame}
+            className="bg-slate-20onGameEnd(0 text-slate-600 italic p-4 border border-slate-300 rounded"
           >
             end game
           </button>
+          {stalemate && !victory ? (
+            <h2 className="text-2xl font-bold underline capitalize">
+              stalemate
+            </h2>
+          ) : (
+            <></>
+          )}
+          {victory ? (
+            <h2 className="text-2xl font-bold underline capitalize">
+              victory by{" "}
+              {victory === "blue" ? (
+                <span className="text-blue-600">blue</span>
+              ) : (
+                <span className="text-red-600">red</span>
+              )}
+            </h2>
+          ) : (
+            <></>
+          )}
         </div>
       </section>
     </div>
