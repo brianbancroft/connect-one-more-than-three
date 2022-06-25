@@ -1,43 +1,78 @@
-import React, { useState, useEffect } from "react";
+import React, { useReducer } from "react";
 import PropTypes from "prop-types";
-import Board from "./Board";
-import IndicatorActivePlayer from "./IndicatorActivePlayer";
-import ButtonTriggerMove from "./ButtonTriggerMove";
 
+import Board from "./Board";
+import ButtonTriggerMove from "./ButtonTriggerMove";
+import IndicatorActivePlayer from "./IndicatorActivePlayer";
 import useDetectVictory from "../hooks/useDetectVictory";
+
+const blankRow = () => [null, null, null, null, null, null, null];
+const initialState = {
+  boardStatus: Array.from(Array(6)).map(blankRow),
+  playerOneActive: true,
+  lastPiecePlayed: {
+    row: null,
+    column: null,
+    currentUser: null,
+  },
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "update-board":
+      return {
+        boardStatus: action.boardStatus,
+        playerOneActive: !state.playerOneActive,
+        lastPiecePlayed: action.lastPiecePlayed,
+      };
+
+    default:
+      console.log("Unknwon case ", action.type);
+  }
+}
 
 function ActiveGame(props) {
   const { onGameEnd } = props;
 
-  const blankRow = () => [null, null, null, null, null, null, null];
-
   const availableUsers = ["blue", "red"];
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const [playerOneActive, setPlayerOneActive] = useState(true);
-  const currentUser = playerOneActive ? availableUsers[0] : availableUsers[1];
+  const currentUser = state.playerOneActive
+    ? availableUsers[0]
+    : availableUsers[1];
 
-  const [boardStatus, setBoardStatus] = useState([
-    blankRow(),
-    blankRow(),
-    blankRow(),
-    blankRow(),
-    blankRow(),
-    blankRow(),
-  ]);
-
-  const [lastPiecePlayed, setLastPiecePlayed] = useState({
-    row: null,
-    column: null,
-  });
+  const { boardStatus, lastPiecePlayed } = state;
 
   const { victory, stalemate } = useDetectVictory({
     boardStatus,
     lastPiecePlayed,
   });
 
-  const handleColumnClick = (column) => () => {
-    addPieceToColumn({ piece: currentUser, columnIndex: column });
-    setPlayerOneActive(!playerOneActive);
+  const executeTurn = ({ boardStatus, lastPiecePlayed }) =>
+    dispatch({ boardStatus, lastPiecePlayed, type: "update-board" });
+
+  const handleColumnClick = (columnIndex) => () => {
+    const newBoard = [...boardStatus];
+    const reversedRows = newBoard.reverse();
+
+    for (let i = 0; i < reversedRows.length; i++) {
+      const row = reversedRows[i];
+
+      if (!(row[columnIndex] === "red" || row[columnIndex] === "blue")) {
+        reversedRows[i][columnIndex] = currentUser;
+
+        executeTurn({
+          boardStatus: reversedRows.reverse(),
+          lastPiecePlayed: {
+            row: 6 - 1 - i,
+            column: columnIndex,
+            currentUser,
+          },
+        });
+
+        break;
+      }
+    }
   };
 
   const determineColumnUnavailable = (columnIndex) => {
@@ -48,65 +83,17 @@ function ActiveGame(props) {
     return true;
   };
 
-  const addPieceToColumn = ({ piece, columnIndex }) => {
-    const newBoard = [...boardStatus];
-    const reversedRows = newBoard.reverse();
-
-    for (let i = 0; i < reversedRows.length; i++) {
-      const row = reversedRows[i];
-
-      if (!(row[columnIndex] === "red" || row[columnIndex] === "blue")) {
-        reversedRows[i][columnIndex] = piece;
-        setLastPiecePlayed({
-          row: 6 - 1 - i,
-          column: columnIndex,
-          currentUser,
-        });
-        setBoardStatus(reversedRows.reverse());
-
-        break;
-      }
-    }
-  };
-
   return (
     <div>
       <div className="grid grid-cols-7 px-2 gap-x-4 mb-2">
-        <ButtonTriggerMove
-          onClick={handleColumnClick(0)}
-          disabled={victory || stalemate || determineColumnUnavailable(0)}
-          currentColor={currentUser}
-        />
-        <ButtonTriggerMove
-          onClick={handleColumnClick(1)}
-          disabled={victory || stalemate || determineColumnUnavailable(1)}
-          currentColor={currentUser}
-        />
-        <ButtonTriggerMove
-          onClick={handleColumnClick(2)}
-          disabled={victory || stalemate || determineColumnUnavailable(2)}
-          currentColor={currentUser}
-        />
-        <ButtonTriggerMove
-          onClick={handleColumnClick(3)}
-          disabled={victory || stalemate || determineColumnUnavailable(3)}
-          currentColor={currentUser}
-        />
-        <ButtonTriggerMove
-          onClick={handleColumnClick(4)}
-          disabled={victory || stalemate || determineColumnUnavailable(4)}
-          currentColor={currentUser}
-        />
-        <ButtonTriggerMove
-          onClick={handleColumnClick(5)}
-          disabled={victory || stalemate || determineColumnUnavailable(5)}
-          currentColor={currentUser}
-        />
-        <ButtonTriggerMove
-          onClick={handleColumnClick(6)}
-          disabled={victory || stalemate || determineColumnUnavailable(6)}
-          currentColor={currentUser}
-        />
+        {Array.from(Array(7)).map((_, index) => (
+          <ButtonTriggerMove
+            key={`trigger-move-${index}`}
+            onClick={handleColumnClick(index)}
+            disabled={victory || stalemate || determineColumnUnavailable(index)}
+            currentColor={currentUser}
+          />
+        ))}
       </div>
 
       <Board boardStatus={boardStatus} />
