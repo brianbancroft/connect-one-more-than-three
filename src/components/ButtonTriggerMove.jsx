@@ -21,6 +21,7 @@ function ButtonTriggerMove(props) {
           active:bg-${currentColor}-700 border-b-4 border-${currentColor}-700 active:border-b-0 h-8
         `}
         onClick={onClick}
+        aria-label="drop-token"
         name="drop-token"
       />
 
