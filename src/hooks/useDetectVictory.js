@@ -25,26 +25,11 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
       row: rowIndex,
     } = lastPiecePlayed;
 
-    // Ensures victory is reset on first trigger
-    if (rowIndex === null) setVictory("");
-
     const positionInBoard = ({ x, y }) => x >= 0 && x <= 6 && y >= 0 && y <= 5;
 
     const markerPresentAtPosition = ({ x, y, color }) =>
       positionInBoard({ x, y }) && boardStatus[y][x] === color;
 
-    /**
-     * Partially-applied function that checks position
-     *
-     * @date 2022-06-24
-     * @param {Integer} x the current column position of the sweeping loop
-     * @param {Integer} y the current row position of the sweeping loop
-     * @param {Integer} dx the difference between the current column position of the sweeping index and the initial position given dt = 1
-     * @param {Integer} dy the difference between the current row position of the sweeping index and the initial position given dt = 1
-     * @param {Integer} t treats position of the marker as a parametric function where (x,y) = f(t)
-     * @param {String} color the current player. trying to keep it to 'red' or 'blue'...
-     * @returns {Boolean} Is colored marker present
-     */
     const checkMarkerPresent =
       ({ x, y, color, dx, dy }) =>
       (t) =>
@@ -72,12 +57,19 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
               color,
             });
 
-            if (
-              (markerPresentAtTime(1) && markerPresentAtTime(2)) ||
-              (markerPresentAtTime(1) &&
-                markerPresentAtTime(-1) &&
-                markerPresentAtTime(-2))
-            ) {
+            // xTurn => xSearch => x1 => x2
+            const caseForward =
+              markerPresentAtTime(1) && markerPresentAtTime(2);
+
+            // xNeg2 - xNeg1 - xTurn - xSearch
+            const caseReverse1 =
+              markerPresentAtTime(-2) && markerPresentAtTime(-3);
+
+            // xNeg1 - xTurn - xSearch - x1
+            const caseReverse2 =
+              markerPresentAtTime(1) && markerPresentAtTime(-2);
+
+            if (caseForward || caseReverse1 || caseReverse2) {
               setVictory(color);
             }
           }
