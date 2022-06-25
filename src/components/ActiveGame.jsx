@@ -1,5 +1,4 @@
-import React, { useReducer, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useReducer } from "react";
 
 import Board from "./Board";
 import ButtonTriggerMove from "./ButtonTriggerMove";
@@ -38,15 +37,10 @@ function reducer(state, action) {
           currentUser: null,
         },
       };
-
-    default:
-      console.error("Unknwon case ", action.type);
   }
 }
 
-function ActiveGame(props) {
-  const { onGameEnd } = props;
-
+function ActiveGame() {
   const playerColors = ["blue", "red"];
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -96,7 +90,6 @@ function ActiveGame(props) {
 
   function handleEndGame() {
     dispatch({ type: "reset" });
-    onGameEnd();
   }
 
   return (
@@ -134,12 +127,6 @@ function ActiveGame(props) {
           />
         </div>
         <div className="capitalize flex w-full items-center pt-12 flex-col">
-          <button
-            onClick={handleEndGame}
-            className="bg-slate-20onGameEnd(0 text-slate-600 italic p-4 border border-slate-300 rounded"
-          >
-            end game
-          </button>
           {stalemate && !victory ? (
             <h2 className="text-2xl font-bold underline capitalize">
               stalemate
@@ -158,15 +145,18 @@ function ActiveGame(props) {
           ) : (
             <></>
           )}
+          {(stalemate || victory) && (
+            <button
+              onClick={handleEndGame}
+              className="bg-slate-20onGameEnd(0 text-slate-600 italic p-4 border border-slate-300 rounded"
+            >
+              Start Over
+            </button>
+          )}
         </div>
       </section>
     </div>
   );
 }
-
-ActiveGame.propTypes = {
-  /** Action that takes place on game end */
-  onGameEnd: PropTypes.func.isRequired,
-};
 
 export default ActiveGame;

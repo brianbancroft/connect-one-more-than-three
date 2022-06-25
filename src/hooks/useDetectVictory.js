@@ -13,6 +13,8 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
       activePiecesSet.has("red")
     ) {
       setStalemate(true);
+    } else {
+      setStalemate(false);
     }
   }, [boardStatus]);
 
@@ -23,7 +25,8 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
       row: rowIndex,
     } = lastPiecePlayed;
 
-    if (rowIndex === null) return;
+    // Ensures victory is reset on first trigger
+    if (rowIndex === null) setVictory("");
 
     const positionInBoard = ({ x, y }) => x >= 0 && x <= 6 && y >= 0 && y <= 5;
 
@@ -82,6 +85,14 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
       }
     }
   }, [lastPiecePlayed, boardStatus]);
+
+  const _reset = useEffect(
+    () => () => {
+      setStalemate(false);
+      setVictory("");
+    },
+    []
+  );
 
   return { victory, stalemate };
 }
