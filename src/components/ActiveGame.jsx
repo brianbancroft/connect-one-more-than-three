@@ -100,8 +100,8 @@ function ActiveGame(props) {
   }
 
   return (
-    <div>
-      <div className="grid grid-cols-7 px-2 gap-x-4 mb-2">
+    <div className="my-4">
+      <div className="grid grid-cols-7 px-4 gap-x-4 border-black border-t border-x py-2">
         {Array.from(Array(7)).map((_, index) => (
           <ButtonTriggerMove
             key={`trigger-move-${index}`}
@@ -148,12 +148,11 @@ function ActiveGame(props) {
             <></>
           )}
           {victory ? (
-            <h2 className="text-2xl font-bold underline capitalize">
-              victory by{" "}
+            <h2 className="text-2xl my-4 font-bold capitalize">
               {victory === "blue" ? (
-                <span className="text-blue-600">blue</span>
+                <span className="text-blue-600 underline">blue wins!</span>
               ) : (
-                <span className="text-red-600">red</span>
+                <span className="text-red-600 underline">red wins</span>
               )}
             </h2>
           ) : (

@@ -6,9 +6,9 @@ function Board(props) {
   const { boardStatus } = props;
 
   const BlueToken = () => (
-    <div className="rounded-full bg-blue-600 w-12 h-12" />
+    <div className="rounded-full bg-blue-600 w-10 h-10" />
   );
-  const RedToken = () => <div className="rounded-full bg-red-600 w-12 h-12" />;
+  const RedToken = () => <div className="rounded-full bg-red-600 w-10 h-10" />;
 
   const boardSpaces = boardStatus.flat().map((token, index) => {
     if (token === "blue")
@@ -25,11 +25,11 @@ function Board(props) {
         </div>
       );
 
-    return <div className="bg-white p-2 h-14" key={index} />;
+    return <div className="bg-white p-2 h-14 w-14" key={index} />;
   });
 
   return (
-    <section className="bg-slate-200 p-4 grid grid-cols-7 grid-rows-6 gap-4 items-center justify-center">
+    <section className="bg-slate-200 p-4 grid grid-cols-7 grid-rows-6 gap-4 items-center justify-center border border-black">
       {boardSpaces}
     </section>
   );

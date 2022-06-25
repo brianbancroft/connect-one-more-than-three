@@ -13,7 +13,7 @@ function App() {
     return (
       <section className="w-full h-full pt-8 pattern flex justify-center">
         <div className="bg-white w-3/4 h-2/3 rounded border border-black shadow-xl p-8">
-          <h2 className="text-2xl my-3">A react-based sample</h2>
+          <h2 className="text-2xl my-3">A Sample in React</h2>
           <p className="my-2">
             Connect three plus one is based on the game of a similar name. A
             sample demo.
@@ -26,6 +26,15 @@ function App() {
               start game
             </button>
           </div>
+        </div>
+        <div>
+          <a
+            href="https://github.com/brianbancroft/connect-one-more-than-three"
+            target="_blank"
+            rel="noreferrer"
+          >
+            View me on Github
+          </a>
         </div>
       </section>
     );
