@@ -92,16 +92,16 @@ function ActiveGame() {
     dispatch({ type: "reset" });
   }
 
+  const gameOver = victory || stalemate;
+
   return (
     <div className="my-4">
-      <div className="grid grid-cols-7 px-4 gap-x-4 border-black border-t border-x py-2">
+      <div className="grid grid-cols-7 px-2 gap-x-4 border-black border-t border-x py-2">
         {Array.from(Array(7)).map((_, index) => (
           <ButtonTriggerMove
             key={`trigger-move-${index}`}
             onClick={handleColumnClick(index)}
-            disabled={Boolean(
-              victory || stalemate || determineColumnUnavailable(index)
-            )}
+            disabled={Boolean(gameOver || determineColumnUnavailable(index))}
             currentColor={currentUser}
           />
         ))}
@@ -115,18 +115,18 @@ function ActiveGame() {
           <IndicatorActivePlayer
             playerName="Player 1"
             color={playerColors[0]}
-            active={playerColors[0] === currentUser}
+            active={!gameOver && playerColors[0] === currentUser}
             playerColors={playerColors}
           />
 
           <IndicatorActivePlayer
             playerName="Player 2"
             color={playerColors[1]}
-            active={playerColors[1] === currentUser}
+            active={!gameOver && playerColors[1] === currentUser}
             playerColors={playerColors}
           />
         </div>
-        <div className="capitalize flex w-full items-center pt-8 flex-col">
+        <div className="capitalize flex w-full items-center pt-2 flex-col">
           {stalemate && !victory ? (
             <h2 className="text-2xl font-bold underline capitalize">
               stalemate
@@ -137,9 +137,9 @@ function ActiveGame() {
           {victory ? (
             <h2 className="text-2xl my-4 font-bold capitalize">
               {victory === "blue" ? (
-                <span className="text-blue-600 underline">blue wins!</span>
+                <span className="text-blue-600 underline">player 1 wins!</span>
               ) : (
-                <span className="text-red-600 underline">red wins</span>
+                <span className="text-red-600 underline">player 2 wins</span>
               )}
             </h2>
           ) : (
@@ -148,7 +148,7 @@ function ActiveGame() {
           {(stalemate || victory) && (
             <button
               onClick={handleEndGame}
-              className="bg-slate-20onGameEnd(0 text-slate-600 italic p-4 border border-slate-300 rounded"
+              className="bg-slate-200 border-b-4 text-slate-600 italic p-4 border border-slate-300 rounded"
             >
               Start Over
             </button>
