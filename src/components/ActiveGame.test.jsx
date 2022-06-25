@@ -1,5 +1,6 @@
 import React from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, test } from "vitest";
+import "@testing-library/jest-dom/extend-expect";
 
 import {
   render,
@@ -7,6 +8,8 @@ import {
   within,
   screen,
   createEvent,
+  getByText,
+  findByText,
 } from "@testing-library/react";
 
 import ActiveGame from "./ActiveGame";
@@ -51,13 +54,139 @@ describe("On pressing a column button for the first time", () => {
       name: "drop-token",
     });
 
-    const myEvent = createEvent.click(loadButtons[0], { button: 2 });
-    await fireEvent(loadButtons[0], myEvent);
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
 
     const playerGroup = screen.getByText("Player 2").closest("div");
 
     within(playerGroup).getByText("your turn");
+  });
+});
 
-    // expect(tokens.length).toBe(1);
+describe("On pressing a column button seven times in succession", () => {
+  it("disables that button", async () => {
+    render(<ActiveGame />);
+    const loadButtons = await screen.getAllByRole("button", {
+      name: "drop-token",
+    });
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    expect(loadButtons[0]).toBeDisabled();
+  });
+});
+
+describe("Basic win condition", () => {
+  it("detects victory for a P1 vertical four in a row", async () => {
+    render(<ActiveGame />);
+    const loadButtons = await screen.getAllByRole("button", {
+      name: "drop-token",
+    });
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[5],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[5],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[5],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    fireEvent(
+      loadButtons[0],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    expect(loadButtons[0]).toBeDisabled();
+
+    expect(screen.queryByText("player 1 wins!")).toBeInTheDocument();
+    expect(screen.queryByText("player 2 wins!")).not.toBeInTheDocument();
   });
 });

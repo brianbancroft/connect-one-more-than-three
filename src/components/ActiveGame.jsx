@@ -135,13 +135,15 @@ function ActiveGame() {
             <></>
           )}
           {victory ? (
-            <h2 className="text-2xl my-4 font-bold capitalize">
-              {victory === "blue" ? (
-                <span className="text-blue-600 underline">player 1 wins!</span>
-              ) : (
-                <span className="text-red-600 underline">player 2 wins</span>
-              )}
-            </h2>
+            victory === "blue" ? (
+              <h2 className="text-blue-600 underline text-2xl my-4 font-bold capitalize">
+                player 1 wins!
+              </h2>
+            ) : (
+              <h2 className="text-red-600 underline text-2xl my-4 font-bold capitalize">
+                player 2 wins
+              </h2>
+            )
           ) : (
             <></>
           )}
