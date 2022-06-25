@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import Token from "./Token";
+
 function Board(props) {
   const { boardStatus } = props;
 
