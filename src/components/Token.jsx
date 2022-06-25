@@ -19,8 +19,8 @@ function Token(props) {
     );
 
   return (
-    <div className="h-14 w-14 bg-yellow-200">
-      <div className="bg-white w-12 h-12 rounded-full border border-black" />
+    <div className="bg-white w-12 h-12 rounded-full border border-black">
+      <div className="hidden">no-token</div>
     </div>
   );
 }
