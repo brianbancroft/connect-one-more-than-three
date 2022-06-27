@@ -1,12 +1,12 @@
-import React, { useReducer } from "react";
+import React, { useReducer } from 'react'
 
-import Board from "./Board";
-import ButtonTriggerMove from "./ButtonTriggerMove";
-import IndicatorActivePlayer from "./IndicatorActivePlayer";
-import useDetectVictory from "../hooks/useDetectVictory";
+import Board from './Board'
+import ButtonTriggerMove from './ButtonTriggerMove'
+import IndicatorActivePlayer from './IndicatorActivePlayer'
+import useDetectVictory from '../hooks/useDetectVictory'
 
-const blankRow = () => [null, null, null, null, null, null, null];
-const generateBoard = () => Array.from(Array(6)).map(blankRow);
+const blankRow = () => [null, null, null, null, null, null, null]
+const generateBoard = () => Array.from(Array(6)).map(blankRow)
 
 const initialState = {
   boardStatus: generateBoard(),
@@ -16,18 +16,18 @@ const initialState = {
     column: null,
     currentUser: null,
   },
-};
+}
 
 function reducer(state, action) {
   switch (action.type) {
-    case "update-board":
+    case 'update-board':
       return {
         boardStatus: action.boardStatus,
         playerOneActive: !state.playerOneActive,
         lastPiecePlayed: action.lastPiecePlayed,
-      };
+      }
 
-    case "reset":
+    case 'reset':
       return {
         boardStatus: generateBoard(),
         playerOneActive: true,
@@ -36,35 +36,35 @@ function reducer(state, action) {
           column: null,
           currentUser: null,
         },
-      };
+      }
   }
 }
 
 function ActiveGame() {
-  const playerColors = ["blue", "red"];
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const playerColors = ['blue', 'red']
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const currentUser = state.playerOneActive ? playerColors[0] : playerColors[1];
+  const currentUser = state.playerOneActive ? playerColors[0] : playerColors[1]
 
-  const { boardStatus, lastPiecePlayed } = state;
+  const { boardStatus, lastPiecePlayed } = state
 
   const { victory, stalemate } = useDetectVictory({
     boardStatus,
     lastPiecePlayed,
-  });
+  })
 
   const executeTurn = ({ boardStatus, lastPiecePlayed }) =>
-    dispatch({ boardStatus, lastPiecePlayed, type: "update-board" });
+    dispatch({ boardStatus, lastPiecePlayed, type: 'update-board' })
 
   const handleColumnClick = (columnIndex) => () => {
-    const newBoard = [...boardStatus];
-    const reversedRows = newBoard.reverse();
+    const newBoard = [...boardStatus]
+    const reversedRows = newBoard.reverse()
 
     for (let i = 0; i < reversedRows.length; i++) {
-      const row = reversedRows[i];
+      const row = reversedRows[i]
 
-      if (!(row[columnIndex] === "red" || row[columnIndex] === "blue")) {
-        reversedRows[i][columnIndex] = currentUser;
+      if (!(row[columnIndex] === 'red' || row[columnIndex] === 'blue')) {
+        reversedRows[i][columnIndex] = currentUser
 
         executeTurn({
           boardStatus: reversedRows.reverse(),
@@ -73,26 +73,26 @@ function ActiveGame() {
             column: columnIndex,
             currentUser,
           },
-        });
+        })
 
-        break;
+        break
       }
     }
-  };
+  }
 
   const determineColumnUnavailable = (columnIndex) => {
     for (let i = 0; i < boardStatus.length; i++) {
-      const row = boardStatus[i];
-      if (row[columnIndex] === null) return false;
+      const row = boardStatus[i]
+      if (row[columnIndex] === null) return false
     }
-    return true;
-  };
-
-  function handleEndGame() {
-    dispatch({ type: "reset" });
+    return true
   }
 
-  const gameOver = victory || stalemate;
+  function handleEndGame() {
+    dispatch({ type: 'reset' })
+  }
+
+  const gameOver = victory || stalemate
 
   return (
     <div className="my-4">
@@ -135,7 +135,7 @@ function ActiveGame() {
             <></>
           )}
           {victory ? (
-            victory === "blue" ? (
+            victory === 'blue' ? (
               <h2 className="text-blue-600 underline text-2xl my-4 font-bold capitalize">
                 player 1 wins!
               </h2>
@@ -158,7 +158,7 @@ function ActiveGame() {
         </div>
       </section>
     </div>
-  );
+  )
 }
 
-export default ActiveGame;
+export default ActiveGame

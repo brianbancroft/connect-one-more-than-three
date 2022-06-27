@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 function ButtonTriggerMove(props) {
-  const { onClick, currentColor, disabled } = props;
+  const { onClick, currentColor, disabled } = props
 
   if (disabled)
     return (
@@ -11,7 +11,7 @@ function ButtonTriggerMove(props) {
         disabled
         name="drop-token"
       />
-    );
+    )
 
   return (
     <>
@@ -30,13 +30,13 @@ function ButtonTriggerMove(props) {
       <div className="h-0 w-0 hidden bg-blue-700" />
       <div className="h-0 w-0 hidden bg-red-700" />
     </>
-  );
+  )
 }
 
 ButtonTriggerMove.propTypes = {
   onClick: PropTypes.func.isRequired,
   currentColor: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
-};
+}
 
-export default ButtonTriggerMove;
+export default ButtonTriggerMove

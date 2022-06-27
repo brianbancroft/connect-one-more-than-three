@@ -1,16 +1,16 @@
 // semantic preference.
-const test = it;
+const test = it
 
-describe("test playthrough that results in stalemate", () => {
+describe('test playthrough that results in stalemate', () => {
   before(() => {
-    cy.visit("//localhost:3000");
+    cy.visit('//localhost:3000')
 
-    cy.findByText("start game").click();
+    cy.findByText('start game').click()
 
-    cy.gameplayStalemate();
-  });
+    cy.gameplayStalemate()
+  })
 
-  test("stalemate indicator is present", async () => {
-    cy.findByText("stalemate").should("be.visible");
-  });
-});
+  test('stalemate indicator is present', async () => {
+    cy.findByText('stalemate').should('be.visible')
+  })
+})

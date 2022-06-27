@@ -1,0 +1,8 @@
+# Output files
+dist
+
+# Node modules
+node_modules
+
+# Netlify config
+.netlify

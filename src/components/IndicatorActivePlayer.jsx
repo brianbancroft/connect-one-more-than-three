@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 function IndicatorActivePlayer(props) {
-  const { playerName, color, active, playerColors } = props;
+  const { playerName, color, active, playerColors } = props
 
   return (
     <>
@@ -11,7 +11,7 @@ function IndicatorActivePlayer(props) {
       <div className="h-12">
         <h3
           className={`text-xl user-select-none ${
-            active ? `underline text-${color}-600` : ""
+            active ? `underline text-${color}-600` : ''
           }`}
         >
           {playerName}
@@ -19,7 +19,7 @@ function IndicatorActivePlayer(props) {
         {active ? <div className="">your turn</div> : <></>}
       </div>
     </>
-  );
+  )
 }
 
 IndicatorActivePlayer.propTypes = {
@@ -27,10 +27,10 @@ IndicatorActivePlayer.propTypes = {
   color: PropTypes.string.isRequired,
   active: PropTypes.bool,
   playerColors: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
+}
 
 IndicatorActivePlayer.defaultProps = {
   active: false,
-};
+}
 
-export default IndicatorActivePlayer;
+export default IndicatorActivePlayer

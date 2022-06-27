@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState } from 'react'
 
-import ActiveGame from "./components/ActiveGame";
-import "./index.css";
+import ActiveGame from './components/ActiveGame'
+import './index.css'
 
 function App() {
-  const [gameActive, setGameActive] = useState(false);
+  const [gameActive, setGameActive] = useState(false)
 
-  const startGame = () => setGameActive(true);
-  const endGame = () => setGameActive(false);
+  const startGame = () => setGameActive(true)
+  const endGame = () => setGameActive(false)
 
   const SplashScreen = () => {
     return (
@@ -15,7 +15,7 @@ function App() {
         <div className="bg-white w-3/4 h-2/3 rounded border border-black shadow-xl p-8">
           <h2 className="text-2xl my-3">A Sample in React</h2>
           <p className="my-2">
-            connect three plus one is based on the game of a similar name.{" "}
+            connect three plus one is based on the game of a similar name.{' '}
           </p>
           <p className="my-2">
             <a
@@ -38,8 +38,8 @@ function App() {
           <div></div>
         </div>
       </section>
-    );
-  };
+    )
+  }
 
   return (
     <>
@@ -50,7 +50,7 @@ function App() {
         {gameActive ? <ActiveGame onGameEnd={endGame} /> : <SplashScreen />}
       </main>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

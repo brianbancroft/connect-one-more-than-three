@@ -1,16 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import Token from "./Token";
+import Token from './Token'
 
 function Board(props) {
-  const { boardStatus } = props;
+  const { boardStatus } = props
 
   const boardSpaces = boardStatus
     .flat()
     .map((token, index) => (
-      <Token key={index} blue={token === "blue"} red={token === "red"} />
-    ));
+      <Token key={index} blue={token === 'blue'} red={token === 'red'} />
+    ))
 
   return (
     <>
@@ -29,13 +29,13 @@ function Board(props) {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 Board.propTypes = {
   boardStatus: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any]))
+    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.any])),
   ).isRequired,
-};
+}
 
-export default Board;
+export default Board
