@@ -37,6 +37,11 @@ function reducer(state, action) {
           currentUser: null,
         },
       }
+
+    default:
+      throw new Error(
+        `Unknown reducer case triggered in ActiveGame.jsx: "${action.type}"`,
+      )
   }
 }
 
