@@ -4,6 +4,9 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
   const [stalemate, setStalemate] = useState(false)
   const [victory, setVictory] = useState('')
 
+  /**
+   * Converts the flattened array of the board to a set. If all moves have been expended, there should only be elements "red" and "blue"
+   *  */
   const _detectStalemate = useEffect(() => {
     const activePiecesSet = new Set(boardStatus.flat())
 
@@ -18,6 +21,10 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
     }
   }, [boardStatus])
 
+  /**
+   * Searches around the set piece through two for loops. If a piece is found, determines
+   * the vector and creates a parametric form equation to determine if there are four adjancent tokens of a color
+   */
   const _detectVictory = useEffect(() => {
     const {
       currentUser: color,
