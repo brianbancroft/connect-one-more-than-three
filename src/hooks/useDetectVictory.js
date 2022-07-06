@@ -57,14 +57,41 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
               color,
             })
 
-            // xTurn => xSearch => x1 => x2
+            /**
+             *
+             *    x2  0   0   0   0   0
+             *    0   x1  0   0   0   0
+             *    0   0   x0  0   0   0
+             *    0   0   0   xi  0   0
+             *    0   0   0   0   0   0
+             *    0   0   0   0   0   0
+             *    xTurn (xi) => xSearch (xo) => x1 => x2
+             */
             const caseForward = markerPresentAtTime(1) && markerPresentAtTime(2)
 
-            // xNeg2 - xNeg1 - xTurn - xSearch
+            /**
+             *
+             *    0   0   0   0   0    0
+             *    0   0   0   0   0    0
+             *    0   0   x0  0   0    0
+             *    0   0   0   xi  0    0
+             *    0   0   0   0   x-2  0
+             *    0   0   0   0   0    x-3
+             *    xTurn (xi) => xSearch (x0) => x-2 => x-3
+             */
             const caseReverse1 =
               markerPresentAtTime(-2) && markerPresentAtTime(-3)
 
-            // xNeg1 - xTurn - xSearch - x1
+            /**
+             *
+             *    0   0   0   0   0    0
+             *    0   x1  0   0   0    0
+             *    0   0   x0  0   0    0
+             *    0   0   0   xi  0    0
+             *    0   0   0   0   x-2  0
+             *    0   0   0   0   0    0
+             *    xTurn (xi) => xSearch (x0) => x1 => x-2
+             */
             const caseReverse2 =
               markerPresentAtTime(1) && markerPresentAtTime(-2)
 
