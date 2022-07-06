@@ -42,7 +42,6 @@ function useDetectVictory({ boardStatus, lastPiecePlayed }) {
       (t) =>
         markerPresentAtPosition({ x: x + t * dx, y: y + t * dy, color })
 
-    // i = row, j = column
     for (let y = rowIndex - 1; y <= rowIndex + 1; y++) {
       for (let x = columnIndex - 1; x <= columnIndex + 1; x++) {
         const notCurrentSpace = !(y === rowIndex && x === columnIndex)
